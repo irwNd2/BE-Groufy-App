@@ -9,7 +9,7 @@ type User struct {
 	Email     *string    `json:"email"`
 	Role      *string    `json:"role"`
 	Name      *string    `json:"name"`
-	Info      []Info       `gorm:"foreignKey:UserID"`
+	Info      []Info     `gorm:"foreignKey:UserID"` //FK to info table, one to many relationship
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"deleted_at,omitempty"`

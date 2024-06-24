@@ -8,7 +8,7 @@ type Info struct {
 	Title     *string    `json:"title"`
 	Content   *string    `json:"content"`
 	Date      *string    `json:"date"`
-	UserID    uint       `json:"user_id"`
+	UserID    uint       `json:"user_id"` //key to join with user table
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `gorm:"index" json:"deleted_at,omitempty"`
