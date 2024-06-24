@@ -36,6 +36,8 @@ func main() {
 	}
 
 	app := fiber.New()
-	handlers.SetupRoutes(app, db)
+	handlers.SetupInfoRoutes(app, db)
+	handlers.SetupUserRoutes(app, db)
+
 	app.Listen(":3000")
 }

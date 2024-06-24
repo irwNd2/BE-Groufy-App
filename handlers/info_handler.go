@@ -28,7 +28,7 @@ func (h *InfoHandler) DeleteInfoById(ctx *fiber.Ctx) error {
 	return h.Service.DeleteInfoById(ctx)
 }
 
-func SetupRoutes(app *fiber.App, db *gorm.DB) {
+func SetupInfoRoutes(app *fiber.App, db *gorm.DB) {
 	handler := &InfoHandler{
 		Service: &services.InfoService{
 			Repo: &repositories.InfoRepository{

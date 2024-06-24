@@ -33,5 +33,5 @@ func NewConnection(config *Config) (*gorm.DB, error) {
 }
 
 func Migrate(db *gorm.DB) error {
-	return db.AutoMigrate(&models.Info{})
+	return db.AutoMigrate(&models.User{}, &models.Info{})
 }
