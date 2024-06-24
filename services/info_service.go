@@ -3,8 +3,11 @@ package services
 import (
 	"be-groufy-app/models"
 	"be-groufy-app/repositories"
+	"errors"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 type InfoService struct {
@@ -37,7 +40,12 @@ func (s *InfoService) GetAllInfo(ctx *fiber.Ctx) error {
 func (s *InfoService) GetInfoById(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	info, err := s.Repo.GetById(id)
+	fmt.Println("err:", err)
+
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Info not found"})
+		}
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "could not get info"})
 	}
 	if id == "" {
