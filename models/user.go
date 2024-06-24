@@ -4,11 +4,10 @@ import "time"
 
 type User struct {
 	ID        uint       `gorm:"primary key;autoIncrement" json:"id"`
-	Username  *string    `json:"username"`
-	Password  *string    `json:"password"`
-	Email     *string    `json:"email"`
-	Role      *string    `json:"role"`
-	Name      *string    `json:"name"`
+	Password  *string    `gorm:"not null" json:"password" binding:"required"`
+	Email     *string    `gorm:"unique" json:"email" binding:"required"`
+	Role      *string    `gorm:"not null" json:"role" binding:"required"`
+	Name      *string    `gorm:"not null" json:"name" binding:"required"`
 	Info      []Info     `gorm:"foreignKey:UserID"` //FK to info table, one to many relationship
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`

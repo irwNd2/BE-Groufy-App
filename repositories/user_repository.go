@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"be-groufy-app/dto/web"
 	"be-groufy-app/models"
 
 	"gorm.io/gorm"
@@ -20,14 +21,18 @@ func (r *UserRepository) GetAll() ([]models.User, error) {
 	return users, err
 }
 
-func (r *UserRepository) GetByRole(role string) ([]models.User, error) {
-	var users []models.User
-	err := r.DB.Where("role = ?", role).Error
-	return users, err
+func (r *UserRepository) GetByRole(role string) (users []models.User, err error) {
+	err = r.DB.Where("role = ?", role).Find(&users).Error
+	return
 }
 
-func (r *UserRepository) GetById(id string) (*models.User, error) {
-	var user models.User
-	err := r.DB.Where("id = ?", id).First(&user).Error
-	return &user, err
+func (r *UserRepository) GetById(id string) (user models.User, err error) {
+	// var user models.User
+	err = r.DB.Where("id = ?", id).First(&user).Error
+	return
+}
+
+func (r *UserRepository) Login(p *web.LoginPayload) (user models.User, err error) {
+	err = r.DB.Where("email = ?", p.Email).Find(&user).Error
+	return
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"be-groufy-app/dto/web"
 	"be-groufy-app/repositories"
 	"be-groufy-app/services"
 
@@ -28,6 +29,19 @@ func (h *UserHandler) GetUserById(ctx *fiber.Ctx) error {
 	return h.Service.GetUserById(ctx)
 }
 
+func (h *UserHandler) AuthLogin(ctx *fiber.Ctx) error {
+	var input web.LoginPayload
+	err := ctx.BodyParser(&input)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	res, err := h.Service.Login(&input)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "bad request"})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": res})
+}
+
 func SetupUserRoutes(app *fiber.App, db *gorm.DB) {
 	handler := &UserHandler{
 		Service: &services.UserService{
@@ -42,4 +56,5 @@ func SetupUserRoutes(app *fiber.App, db *gorm.DB) {
 	api.Get("/all", handler.GetAllUser)
 	api.Get("/:id", handler.GetUserById)
 	api.Get("/role/:role", handler.GetUserByRole)
+	api.Post("/login", handler.AuthLogin)
 }

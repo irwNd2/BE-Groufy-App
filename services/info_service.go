@@ -23,7 +23,7 @@ func (s *InfoService) AddInfo(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "could not add information"})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "info has been added"})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "info has been added"})
 }
 
 func (s *InfoService) GetAllInfo(ctx *fiber.Ctx) error {
