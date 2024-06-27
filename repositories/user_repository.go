@@ -27,7 +27,6 @@ func (r *UserRepository) GetByRole(role string) (users []models.User, err error)
 }
 
 func (r *UserRepository) GetById(id string) (user models.User, err error) {
-	// var user models.User
 	err = r.DB.Where("id = ?", id).First(&user).Error
 	return
 }

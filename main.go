@@ -1,8 +1,7 @@
 package main
 
 import (
-	"be-groufy-app/handlers"
-	"be-groufy-app/storage"
+	apps "be-groufy-app/app"
 	"log"
 	"os"
 
@@ -16,7 +15,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	config := &storage.Config{
+	config := &apps.Config{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
 		User:     os.Getenv("DB_USER"),
@@ -25,19 +24,19 @@ func main() {
 		SSLMode:  os.Getenv("DB_SSLMODE"),
 	}
 
-	db, err := storage.NewConnection(config)
+	db, err := apps.NewConnection(config)
 	if err != nil {
 		log.Fatal("Database connection error")
 	}
-	err = storage.Migrate(db)
+	err = apps.Migrate(db)
 
 	if err != nil {
 		log.Fatal("Database migrating error")
 	}
-
 	app := fiber.New()
-	handlers.SetupInfoRoutes(app, db)
-	handlers.SetupUserRoutes(app, db)
+
+	apps.SetupUserRoutes(app, db)
+	apps.SetupInfoRoutes(app, db)
 
 	app.Listen(":3000")
 }

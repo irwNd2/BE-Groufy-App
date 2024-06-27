@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"be-groufy-app/models"
-	"be-groufy-app/repositories"
 	"be-groufy-app/services"
 
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 type InfoHandler struct {
@@ -51,20 +49,4 @@ func (h *InfoHandler) DeleteInfoById(ctx *fiber.Ctx) error {
 		ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
 	}
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success delete info"})
-}
-
-func SetupInfoRoutes(app *fiber.App, db *gorm.DB) {
-	handler := &InfoHandler{
-		Service: &services.InfoService{
-			Repo: &repositories.InfoRepository{
-				DB: db,
-			},
-		},
-	}
-
-	api := app.Group("/api/info")
-	api.Post("/add", handler.AddInfo)
-	api.Get("/all", handler.GetAllInfo)
-	api.Get("/:id", handler.GetInfoById)
-	api.Delete("/:id", handler.DeleteInfoById)
 }
