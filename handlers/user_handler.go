@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"be-groufy-app/dto/web"
+	"be-groufy-app/models"
 	"be-groufy-app/repositories"
 	"be-groufy-app/services"
 
@@ -14,19 +15,48 @@ type UserHandler struct {
 }
 
 func (h *UserHandler) RegisterUser(ctx *fiber.Ctx) error {
-	return h.Service.Register(ctx)
+	user := new(models.User)
+	err := ctx.BodyParser(user)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Bad request"})
+	}
+
+	err = h.Service.Register(user)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "registered successfully"})
+
+	// return h.Service.Register(ctx)
 }
 
 func (h *UserHandler) GetAllUser(ctx *fiber.Ctx) error {
-	return h.Service.GetAllUser(ctx)
+	users, err := h.Service.GetAllUser()
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": users})
+	// return h.Service.GetAllUser(ctx)
 }
 
 func (h *UserHandler) GetUserByRole(ctx *fiber.Ctx) error {
-	return h.Service.GetUserByRole(ctx)
+	role := ctx.Params("role")
+	users, err := h.Service.GetUserByRole(role)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": users})
+	// return h.Service.GetUserByRole(ctx)
 }
 
 func (h *UserHandler) GetUserById(ctx *fiber.Ctx) error {
-	return h.Service.GetUserById(ctx)
+	id := ctx.Params("id")
+	user, err := h.Service.GetUserById(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "ise"})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success", "data": user})
+	// return h.Service.GetUserById(ctx)
 }
 
 func (h *UserHandler) AuthLogin(ctx *fiber.Ctx) error {
