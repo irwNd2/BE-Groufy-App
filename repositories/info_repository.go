@@ -10,8 +10,9 @@ type InfoRepository struct {
 	DB *gorm.DB
 }
 
-func (r *InfoRepository) Create(info *models.Info) error {
-	return r.DB.Create(info).Error
+func (r *InfoRepository) Create(info *models.Info) (*models.Info, error) {
+	err := r.DB.Create(info).Error
+	return info, err
 }
 
 func (r *InfoRepository) GetAll() ([]models.Info, error) {
